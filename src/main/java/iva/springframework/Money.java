@@ -2,22 +2,24 @@ package iva.springframework;
 
 import org.w3c.dom.html.HTMLImageElement;
 
+
+
 /**
  * Created By iVa on 3/1/2021.
  */
-public abstract class Money {
+public  class Money implements Expression {
     protected int amount;
     protected String currency;
 
 
-    public abstract Money times(int multiplier);
+
 
     public static Money dollar(int amount) {
-        return new Dollar(amount, "USD");
+        return new Money(amount, "USD");
     }
 
     public static Money franc(int amount) {
-        return new Franc(amount, "CHF");
+        return new Money(amount, "CHF");
     }
 
     Money(int amount, String currency) {
@@ -28,12 +30,30 @@ public abstract class Money {
     public boolean equals(Object object) {
         Money money = (Money) object;
         return amount == money.amount
-                && getClass().equals(object.getClass());
+                && this.currency == money.currency;
     }
 
 
     protected String currency() {
         return currency;
+    }
+
+    @Override
+    public String toString() {
+        return "Money{" +
+                "amount=" + amount +
+                ", currency='" + currency + '\'' +
+                '}';
+    }
+
+    public  Money times(int multiplier) {
+
+        return new Money(amount * multiplier,   this.currency);
+    }
+
+    public Expression plus(Money add) {
+
+        return new Money(amount + add.amount,   currency);
     }
 }
 
